@@ -12,8 +12,8 @@ const subscriberSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["active", "inactive"], // Only allowing specific statuses
-    default: "active", // Default status
+    enum: ["Active", "Inactive"], // Changed to start with uppercase letters
+    default: "Active", // Default status
   },
   publicIps: {
     type: [String], // Array of public IP addresses

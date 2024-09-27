@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
     username: req.body.username,
     expirationDate: req.body.expirationDate,
     publicIps: req.body.publicIps, // Include public IPs if provided
+    status: req.body.status.charAt(0).toUpperCase() + req.body.status.slice(1), // Ensure status is capitalized
   });
 
   try {
@@ -64,7 +65,8 @@ router.patch("/:username", getSubscriberByUsername, async (req, res) => {
     res.subscriber.expirationDate = req.body.expirationDate;
   }
   if (req.body.status != null) {
-    res.subscriber.status = req.body.status; // Update status if provided
+    res.subscriber.status =
+      req.body.status.charAt(0).toUpperCase() + req.body.status.slice(1); // Update status if provided and ensure it's capitalized
   }
   if (req.body.publicIps != null) {
     res.subscriber.publicIps = req.body.publicIps; // Update public IPs if provided
