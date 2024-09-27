@@ -24,6 +24,7 @@ const SubscribersTable = () => {
   const [newSubscriber, setNewSubscriber] = useState({
     username: "",
     expirationDate: "",
+    publicIps: "", // New field for public IPs
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,8 +51,23 @@ const SubscribersTable = () => {
 
   const handleAddSubscriber = async () => {
     try {
-      await axios.post(API_URL, newSubscriber);
-      setNewSubscriber({ username: "", expirationDate: "" });
+      const currentDate = new Date();
+      const expirationDate =
+        newSubscriber.expirationDate ||
+        new Date(currentDate.setDate(currentDate.getDate() + 7))
+          .toISOString()
+          .split("T")[0]; // Set to current date + 7 days if not specified
+
+      const subscriberData = {
+        username: newSubscriber.username,
+        expirationDate: expirationDate,
+        publicIps: newSubscriber.publicIps.split(",").map((ip) => ip.trim()), // Split and trim IPs
+      };
+
+      console.log(subscriberData); // Debugging
+
+      await axios.post(API_URL, subscriberData);
+      setNewSubscriber({ username: "", expirationDate: "", publicIps: "" }); // Reset all fields
       fetchSubscribers();
     } catch (err) {
       setError("Failed to add subscriber");
@@ -81,6 +97,8 @@ const SubscribersTable = () => {
             <TableRow>
               <TableCell>Username</TableCell>
               <TableCell>Expiration Date</TableCell>
+              <TableCell>Public IPs</TableCell>{" "}
+              {/* New column for public IPs */}
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -90,6 +108,13 @@ const SubscribersTable = () => {
                 <TableCell>{subscriber.username}</TableCell>
                 <TableCell>
                   {new Date(subscriber.expirationDate).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  {Array.isArray(subscriber.publicIps) &&
+                  subscriber.publicIps.length > 0
+                    ? subscriber.publicIps.join(", ")
+                    : "No IPs"}{" "}
+                  {/* Check if publicIps is defined and not empty */}
                 </TableCell>
                 <TableCell>
                   <Button
@@ -127,6 +152,14 @@ const SubscribersTable = () => {
           fullWidth
           margin="normal"
           InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label="Public IPs (comma-separated)"
+          name="publicIps"
+          value={newSubscriber.publicIps}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
         />
         <Button
           variant="contained"

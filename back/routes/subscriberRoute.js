@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const Subscriber = require("../models/subscriberModel");
 
 // Middleware to get subscriber by username
@@ -45,6 +44,7 @@ router.post("/", async (req, res) => {
   const subscriber = new Subscriber({
     username: req.body.username,
     expirationDate: req.body.expirationDate,
+    publicIps: req.body.publicIps, // Include public IPs if provided
   });
 
   try {
@@ -62,6 +62,12 @@ router.patch("/:username", getSubscriberByUsername, async (req, res) => {
   }
   if (req.body.expirationDate != null) {
     res.subscriber.expirationDate = req.body.expirationDate;
+  }
+  if (req.body.status != null) {
+    res.subscriber.status = req.body.status; // Update status if provided
+  }
+  if (req.body.publicIps != null) {
+    res.subscriber.publicIps = req.body.publicIps; // Update public IPs if provided
   }
 
   try {
