@@ -22,13 +22,22 @@ import { CheckCircle, Cancel, Edit } from "@mui/icons-material";
 const API_URL =
   process.env.REACT_APP_API_URL || "http://localhost:3001/subscribers";
 
+// Debug flag
+const DEBUG = false; // Set this to false to disable all debug logs
+
+const log = (...args) => {
+  if (DEBUG) {
+    console.log(...args);
+  }
+};
+
 const SubscribersTable = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [newSubscriber, setNewSubscriber] = useState({
     username: "",
     expirationDate: "",
     publicIps: "",
-    status: "Active", // Default to "Active" for new subscribers
+    status: "Active",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,9 +49,12 @@ const SubscribersTable = () => {
   const fetchSubscribers = async () => {
     try {
       setLoading(true);
+      log("Fetching subscribers...");
       const response = await axios.get(API_URL);
+      log("Fetched subscribers:", response.data);
       setSubscribers(response.data);
     } catch (err) {
+      console.error("Error fetching subscribers:", err);
       setError("Failed to fetch subscribers");
     } finally {
       setLoading(false);
@@ -52,59 +64,85 @@ const SubscribersTable = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewSubscriber((prev) => ({ ...prev, [name]: value }));
-    console.log(`Input changed: ${name} = ${value}`); // Log the input change
+    log(`Input change - ${name}: ${value}`);
   };
+
+  const [originalUsername, setOriginalUsername] = useState("");
 
   const handleAddOrUpdateSubscriber = async () => {
     try {
-      const currentDate = new Date();
+      log("Add/Update button clicked");
+      log("Current newSubscriber state:", newSubscriber);
+
       const expirationDate =
-        newSubscriber.expirationDate ||
-        new Date(currentDate.setDate(currentDate.getDate() + 7))
-          .toISOString()
-          .split("T")[0];
+        newSubscriber.expirationDate || new Date().toISOString().split("T")[0];
+
+      const publicIps =
+        typeof newSubscriber.publicIps === "string"
+          ? newSubscriber.publicIps.split(",").map((ip) => ip.trim())
+          : newSubscriber.publicIps;
 
       const subscriberData = {
         username: newSubscriber.username,
-        expirationDate: expirationDate,
-        publicIps: newSubscriber.publicIps.split(",").map((ip) => ip.trim()),
-        status: newSubscriber.status, // Ensure status is correctly set
+        expirationDate,
+        publicIps,
+        status: newSubscriber.status,
       };
 
-      console.log("Subscriber Data to be sent:", subscriberData); // Log the data being sent
+      log("Prepared subscriber data for request:", subscriberData);
 
-      if (newSubscriber._id) {
-        await axios.put(`${API_URL}/${newSubscriber.username}`, subscriberData);
+      if (originalUsername) {
+        log(`Updating subscriber with original username: ${originalUsername}`);
+        const response = await axios.patch(
+          `${API_URL}/${originalUsername}`,
+          subscriberData
+        );
+        log("Update response:", response.data);
       } else {
-        await axios.post(API_URL, subscriberData);
+        log("Adding new subscriber");
+        const response = await axios.post(API_URL, subscriberData);
+        log("Add response:", response.data);
       }
 
-      // Resetting state after adding/updating
       setNewSubscriber({
         username: "",
         expirationDate: "",
         publicIps: "",
-        status: "Active", // Resetting back to default
+        status: "Active",
       });
+      setOriginalUsername("");
+
       fetchSubscribers();
     } catch (err) {
+      console.error("Error during add/update:", err);
       setError("Failed to add/update subscriber");
     }
   };
 
   const handleEditSubscriber = (subscriber) => {
+    const formattedDate = new Date(subscriber.expirationDate)
+      .toISOString()
+      .split("T")[0];
+
     setNewSubscriber({
-      ...subscriber,
-      status:
-        subscriber.status.charAt(0).toUpperCase() + subscriber.status.slice(1), // Ensure status is capitalized
+      _id: subscriber._id,
+      username: subscriber.username,
+      expirationDate: formattedDate,
+      publicIps: subscriber.publicIps.join(", "),
+      status: subscriber.status,
     });
+
+    setOriginalUsername(subscriber.username);
   };
 
   const handleDeleteSubscriber = async (username) => {
     try {
-      await axios.delete(`${API_URL}/${username}`);
+      log(`Deleting subscriber with ID: ${username}`);
+      const response = await axios.delete(`${API_URL}/${username}`);
+      log("Delete response:", response.data);
       fetchSubscribers();
     } catch (err) {
+      console.error("Error deleting subscriber:", err);
       setError("Failed to delete subscriber");
     }
   };
@@ -182,7 +220,6 @@ const SubscribersTable = () => {
                   <TableCell>
                     {subscriber.status.charAt(0).toUpperCase() +
                       subscriber.status.slice(1)}
-                    {" " /* Display formatted status */}
                   </TableCell>
                   <TableCell>
                     <Button
@@ -221,7 +258,7 @@ const SubscribersTable = () => {
           value={newSubscriber.username}
           onChange={handleInputChange}
           fullWidth
-          margin="normal"
+          margin="dense"
         />
         <TextField
           label="Expiration Date"
@@ -230,7 +267,7 @@ const SubscribersTable = () => {
           value={newSubscriber.expirationDate}
           onChange={handleInputChange}
           fullWidth
-          margin="normal"
+          margin="dense"
           InputLabelProps={{ shrink: true }}
         />
         <TextField
@@ -239,7 +276,7 @@ const SubscribersTable = () => {
           value={newSubscriber.publicIps}
           onChange={handleInputChange}
           fullWidth
-          margin="normal"
+          margin="dense"
         />
         <Select
           name="status"
@@ -248,7 +285,7 @@ const SubscribersTable = () => {
           variant="outlined"
           size="small"
           fullWidth
-          margin="normal"
+          margin="dense"
         >
           <MenuItem value="Active">Active</MenuItem>
           <MenuItem value="Inactive">Inactive</MenuItem>
