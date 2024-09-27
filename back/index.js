@@ -30,9 +30,11 @@ const subscribersRouter = require("./routes/subscriberRoute");
 app.use("/subscribers", subscribersRouter);
 
 app.all("*", (req, res) => {
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
   res.status(404).json({
     message: "The endpoint you are trying to reach does not exist.",
-    ip: req.ip,
+    ip: ip,
   });
 });
 
