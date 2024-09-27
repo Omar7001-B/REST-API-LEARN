@@ -82,4 +82,9 @@ router.delete("/:username", getSubscriberByUsername, async (req, res) => {
   }
 });
 
+// Test endpoint
+router.get("/test", (req, res) => {
+  res.json({ message: "Test endpoint" });
+});
+
 module.exports = router;
