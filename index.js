@@ -8,7 +8,15 @@ const app = express();
 // Required .env variables: DB_USERNAME, DB_PASSWORD, DB_CLUSTER, DB_NAME, DB_OPTIONS
 const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}${process.env.DB_OPTIONS}`;
 
-mongoose.connect(connectionString);
+mongoose
+  .connect(connectionString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Try setting this to a higher value
+    socketTimeoutMS: 45000, // Higher socket timeout
+  })
+  .then(() => console.log("Connected to database"))
+  .catch((error) => console.error("Connection error:", error));
 
 const db = mongoose.connection;
 
