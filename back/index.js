@@ -6,7 +6,6 @@ const cors = require("cors");
 const app = express();
 
 // Construct the connection string
-// Required .env variables: DB_USERNAME, DB_PASSWORD, DB_CLUSTER, DB_NAME, DB_OPTIONS
 const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}${process.env.DB_OPTIONS}`;
 
 mongoose
@@ -36,5 +35,8 @@ app.all("*", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server is running on port " + PORT));
+// Remove this line when deploying to Vercel
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => console.log("Server is running on port " + PORT));
+
+module.exports = app; // Export the app for Vercel

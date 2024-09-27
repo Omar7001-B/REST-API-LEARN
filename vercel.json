@@ -2,12 +2,12 @@
     "version": 2,
     "builds": [
         {
-            "src": "front/package.json",
-            "use": "@vercel/static-build"
-        },
-        {
             "src": "back/index.js",
             "use": "@vercel/node"
+        },
+        {
+            "src": "front/package.json",
+            "use": "@vercel/static-build"
         }
     ],
     "routes": [
