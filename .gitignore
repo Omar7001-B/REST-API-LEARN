@@ -13,6 +13,9 @@ npm-debug.log*
 /back/node_modules/
 /front/node_modules/
 
+# Build directory for React app
+/front/build/
+
 # Optional npm cache directory
 .npm
 
