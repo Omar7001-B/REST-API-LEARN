@@ -32,6 +32,7 @@ app.use("/subscribers", subscribersRouter);
 app.all("*", (req, res) => {
   res.status(404).json({
     message: "The endpoint you are trying to reach does not exist.",
+    ip: req.ip,
   });
 });
 
