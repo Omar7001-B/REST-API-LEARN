@@ -1,5 +1,5 @@
 ### 1. (Local) Get all subscribers
-GET http://localhost:3000/subscribers
+GET http://localhost:3001/subscribers
 Accept: application/json
 
 ### (DEPLOYED) 1. Get all subscribers
