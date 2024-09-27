@@ -20,6 +20,11 @@ app.use(express.json());
 const subscribersRouter = require("./routes/subscriberRoute");
 app.use("/subscribers", subscribersRouter);
 
-app.listen(process.env.PORT || 3000, () =>
-  console.log("Server is running on port 3000")
-);
+app.all("*", (req, res) => {
+  res.status(404).json({
+    message: "The endpoint you are trying to reach does not exist.",
+  });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Server is running on port " + PORT));

@@ -38,3 +38,12 @@ Content-Type: application/json
 
 ### 5. Delete a subscriber by username
 DELETE http://localhost:3000/subscribers/prek1
+
+###
+
+### 6. Test endpoint
+GET http://localhost:3000/subscribers/test
+
+
+###
+GET http://localhost:3000/test
