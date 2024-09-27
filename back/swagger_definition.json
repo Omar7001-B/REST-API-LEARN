@@ -1,0 +1,163 @@
+
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Subscribers API",
+    "version": "1.0.0",
+    "description": "API for managing subscribers"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/subscribers": {
+      "get": {
+        "summary": "Get All Subscribers",
+        "responses": {
+          "200": {
+            "description": "A list of all subscribers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "expirationDate": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a New Subscriber",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "expirationDate": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": ["username", "expirationDate"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Subscriber created successfully"
+          }
+        }
+      }
+    },
+    "/subscribers/{username}": {
+      "get": {
+        "summary": "Get a Specific Subscriber",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of a specific subscriber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "expirationDate": {
+                      "type": "string",
+                      "format": "date"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a Subscriber",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "expirationDate": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": ["expirationDate"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscriber updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a Subscriber",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Subscriber deleted successfully"
+          }
+        }
+      }
+    }
+  }
+}

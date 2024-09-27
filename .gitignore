@@ -1,0 +1,33 @@
+# Node.js dependencies
+/node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+/back/node_modules/
+/front/node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Mac system files (if you're working on a Mac at any point)
+.DS_Store
+
+# Windows system files
+Thumbs.db
+desktop.ini
+
+# IDE/Editor specific files (adjust for your editor)
+.vscode/
+.idea/
+*.swp
+*.swo
