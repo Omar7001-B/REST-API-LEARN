@@ -23,7 +23,7 @@ const API_URL =
   process.env.REACT_APP_API_URL || "http://localhost:3001/subscribers";
 
 // Debug flag
-const DEBUG = false; // Set this to false to disable all debug logs
+const DEBUG = process.env.REACT_APP_ENV === "development";
 
 const log = (...args) => {
   if (DEBUG) {
