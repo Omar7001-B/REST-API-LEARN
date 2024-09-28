@@ -5,6 +5,19 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 
+// Check for required environment variables
+if (
+  !process.env.DB_USERNAME ||
+  !process.env.DB_PASSWORD ||
+  !process.env.DB_CLUSTER ||
+  !process.env.DB_NAME
+) {
+  console.error(
+    "Missing required environment variables for database connection."
+  );
+  process.exit(1);
+}
+
 // Construct the connection string
 const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}${process.env.DB_OPTIONS}`;
 
@@ -16,18 +29,23 @@ mongoose
     socketTimeoutMS: 45000, // Higher socket timeout
   })
   .then(() => console.log("Connected to database"))
-  .catch((error) => console.error("Connection error:", error));
+  .catch((error) => {
+    console.error("Connection error:", error);
+    process.exit(1); // Exit process if database connection fails
+  });
 
 const db = mongoose.connection;
 
 db.on("error", (error) => console.error("Connection error:", error));
-db.once("open", () => console.log("Connected to database"));
+db.once("open", () => console.log("Database connection opened"));
 
 app.use(express.json());
 app.use(cors());
 
 const subscribersRouter = require("./routes/subscriberRoute");
+const modInfoRouter = require("./routes/modInfoRoute"); // Corrected import for modInfoRouter
 app.use("/subscribers", subscribersRouter);
+app.use("/modInfo", modInfoRouter);
 
 app.all("*", (req, res) => {
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
