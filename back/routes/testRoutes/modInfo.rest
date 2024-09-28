@@ -1,0 +1,52 @@
+### 1. (Local) Get mod info
+GET http://localhost:3001/modInfo
+Accept: application/json
+
+### (DEPLOYED) 1. Get mod info
+GET https://rest-api-back.vercel.app/modInfo
+Accept: application/json
+
+###
+
+### 2. Update mod info (partial update)
+PATCH http://localhost:3001/modInfo
+Content-Type: application/json
+
+{
+  "version": "1.0.0",
+  "updateAvailable": false,
+  "discordLink": "https://discord.gg/sfNXW3PqQu",
+  "activeAllUsers": true,
+  "disableAllUsers": false,
+  "featureToggles": {
+    "enableFarming": true,
+    "enableBuyItems": true,
+    "enableBuyGears": true,
+    "enableSaveInventory": true,
+    "enableCompleteInventory": true
+  }
+}
+
+###
+
+### 3. Test endpoint
+GET http://localhost:3001/modInfo/test
+
+### 4. (Local) Initialize mod info[]
+POST http://localhost:3001/modInfo/init
+Content-Type: application/json
+
+{
+  "version": "1.0.0",
+  "updateAvailable": false,
+  "discordLink": "https://discord.gg/sfNXW3PqQu",
+  "activeAllUsers": false,
+  "disableAllUsers": false,
+  "featureToggles": {
+    "enableFarming": false,
+    "enableBuyItems": false,
+    "enableBuyGears": false,
+    "enableSaveInventory": false,
+    "enableCompleteInventory": false
+  }
+}
