@@ -6,14 +6,17 @@
             "use": "@vercel/node"
         },
         {
-            "src": "front/package.json",
-            "use": "@vercel/static-build"
+            "src": "front/",
+            "use": "@vercel/static",
+            "config": {
+                "distDir": "front/build"
+            }
         }
     ],
     "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "/back/index.js"
+            "dest": "/back/$1"
         },
         {
             "src": "/(.*)",

@@ -1,5 +1,12 @@
 require("dotenv").config();
 
+const DEBUG = true;
+const log = (...args) => {
+  if (DEBUG) {
+    console.log(...args);
+  }
+};
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -21,6 +28,8 @@ if (
 // Construct the connection string
 const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}${process.env.DB_OPTIONS}`;
 
+log(connectionString);
+
 mongoose
   .connect(connectionString, {
     useNewUrlParser: true,
@@ -41,6 +50,11 @@ db.once("open", () => console.log("Database connection opened"));
 
 app.use(express.json());
 app.use(cors());
+
+app.use((req, res, next) => {
+  log(req.method, req.path, req.body);
+  next();
+});
 
 const subscribersRouter = require("./routes/subscriberRoute");
 const modInfoRouter = require("./routes/modInfoRoute"); // Corrected import for modInfoRouter
