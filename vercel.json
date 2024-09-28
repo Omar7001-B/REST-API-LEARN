@@ -1,0 +1,35 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "back/index.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "front/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "."
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(?<path>.*)",
+            "headers": {
+                "Location": "/$path"
+            },
+            "dest": "/back"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/front/build/index.html"
+        },
+        {
+            "src": "/(.*).(js|css|icon|png|jpg|jpeg|gif|ico|svg)",
+            "dest": "/front/build/$1.$2"
+        }
+    ],
+    "installCommand": "cd front && npm install && cd ../back && npm install",
+    "buildCommand": "cd front && npm run build"
+}
