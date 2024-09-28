@@ -152,12 +152,38 @@ const SubscribersTable = () => {
     const expiryDate = new Date(expirationDate);
     const timeDifference = expiryDate - now;
 
-    const daysLeft = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    const hoursLeft = Math.floor(
-      (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
+    if (timeDifference < 0) {
+      return { expired: true };
+    }
 
-    return { daysLeft, hoursLeft, expired: timeDifference < 0 };
+    const totalMinutes = Math.floor(timeDifference / (1000 * 60));
+    const years = Math.floor(totalMinutes / (60 * 24 * 365));
+    const months = Math.floor(
+      (totalMinutes % (60 * 24 * 365)) / (60 * 24 * 30)
+    );
+    const days = Math.floor((totalMinutes % (60 * 24 * 30)) / (60 * 24));
+    const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+    const minutes = totalMinutes % 60;
+
+    return {
+      years,
+      months,
+      days,
+      hours,
+      minutes,
+      expired: false,
+    };
+  };
+
+  const timeLeftText = (time) => {
+    const parts = [];
+    if (time.years) parts.push(`${time.years}y`);
+    if (time.months) parts.push(`${time.months}m`);
+    if (time.days) parts.push(`${time.days}d`);
+    if (time.hours) parts.push(`${time.hours}h`);
+    if (time.minutes) parts.push(`${time.minutes}m`);
+
+    return parts.join(" ") || "Expired";
   };
 
   if (loading) return <CircularProgress />;
@@ -182,12 +208,10 @@ const SubscribersTable = () => {
           </TableHead>
           <TableBody>
             {subscribers.map((subscriber) => {
-              const { daysLeft, hoursLeft, expired } = calculateTimeLeft(
-                subscriber.expirationDate
-              );
-              const timeLeftText = expired
-                ? `Expired ${Math.abs(daysLeft)}d ${Math.abs(hoursLeft)}h`
-                : `${Math.abs(daysLeft)}d ${Math.abs(hoursLeft)}h`;
+              const time = calculateTimeLeft(subscriber.expirationDate);
+              const timeLeftDisplay = time.expired
+                ? "Expired"
+                : timeLeftText(time);
 
               return (
                 <TableRow key={subscriber._id}>
@@ -197,17 +221,17 @@ const SubscribersTable = () => {
                   </TableCell>
                   <TableCell>
                     <Box display="flex" alignItems="center">
-                      {expired ? (
+                      {time.expired ? (
                         <Cancel color="error" />
                       ) : (
                         <CheckCircle color="success" />
                       )}
                       <Typography
                         variant="body1"
-                        color={expired ? "error.main" : "success.main"}
+                        color={time.expired ? "error.main" : "success.main"}
                         ml={1}
                       >
-                        {timeLeftText}
+                        {timeLeftDisplay}
                       </Typography>
                     </Box>
                   </TableCell>
