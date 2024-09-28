@@ -29,10 +29,7 @@ Content-Type: application/json
 
 ###
 
-### 3. Test endpoint
-GET http://localhost:3001/modInfo/test
-
-### 4. (Local) Initialize mod info[]
+### 4. (Local) Initialize mod info if not exist
 POST http://localhost:3001/modInfo/init
 Content-Type: application/json
 
