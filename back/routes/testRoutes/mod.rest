@@ -1,0 +1,48 @@
+### 1. (Local) Get subscriber data along with mod info
+GET http://localhost:3001/mod/subscriber/111111
+Accept: application/json
+
+### (DEPLOYED) 1. Get subscriber data along with mod info
+GET https://rest-api-back.vercel.app/mod/subscriber/111111
+Accept: application/json
+
+###
+
+### 2. (Local) Add or update user stats
+POST http://localhost:3001/mod/stats/111111
+Content-Type: application/json
+
+{
+  "farmingStats": {
+    "Gold Block": 74,
+    "Gold Nugget": 100,
+    "Raw Gold": 2893,
+    "Gold Ingot": 270
+  },
+  "itemStats": {
+    "Cobweb": 64,
+    "Potion of Strength": 20
+  },
+  "gearStats": {
+    "Sword": 20,
+    "Shears": 1,
+    "Bow": 1
+  },
+  "username": "111111"
+}
+
+### (DEPLOYED) 2. Add or update user stats
+POST https://rest-api-back.vercel.app/mod/stats/111111
+Content-Type: application/json
+
+{
+  "farmingStats": {
+    "someStat": 1
+  },
+  "itemStats": {
+    "anotherStat": 2
+  },
+  "gearStats": {
+    "gearStat": 3
+  }
+}
