@@ -16,14 +16,26 @@ const ModInfo = () => {
     version: "",
     updateAvailable: false,
     discordLink: "",
-    activeAllUsers: false,
-    disableAllUsers: false,
+    enableAll: false,
+    disableAll: false,
     featureToggles: {
-      enableFarming: false,
-      enableBuyItems: false,
-      enableBuyGears: false,
-      enableSaveInventory: false,
-      enableCompleteInventory: false,
+      farming: false,
+      buyItems: false,
+      buyGear: false,
+      saveInventory: false,
+      completeInventory: false,
+    },
+    dataSyncOptions: {
+      onGameOpenClose: false,
+      onModScreenOpen: false,
+      afterCycle: false,
+      afterOperation: false,
+    },
+    userValidationOptions: {
+      onGameStart: false,
+      onScreenOpen: false,
+      afterCycle: false,
+      afterOperation: false,
     },
   });
   const [loading, setLoading] = useState(true);
@@ -78,11 +90,12 @@ const ModInfo = () => {
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
+    const [section, field] = name.split(".");
     setModInfo((prev) => ({
       ...prev,
-      featureToggles: {
-        ...prev.featureToggles,
-        [name]: checked,
+      [section]: {
+        ...prev[section],
+        [field]: checked,
       },
     }));
   };
@@ -129,27 +142,28 @@ const ModInfo = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={modInfo.activeAllUsers}
+                checked={modInfo.enableAll}
                 onChange={(e) =>
-                  setModInfo({ ...modInfo, activeAllUsers: e.target.checked })
+                  setModInfo({ ...modInfo, enableAll: e.target.checked })
                 }
               />
             }
-            label="Active All Users"
+            label="Enable All"
           />
           <FormControlLabel
             control={
               <Checkbox
-                checked={modInfo.disableAllUsers}
+                checked={modInfo.disableAll}
                 onChange={(e) =>
-                  setModInfo({ ...modInfo, disableAllUsers: e.target.checked })
+                  setModInfo({ ...modInfo, disableAll: e.target.checked })
                 }
               />
             }
-            label="Disable All Users"
+            label="Disable All"
           />
         </Box>
 
+        {/* Feature Toggles */}
         <Typography variant="h6" sx={{ marginBottom: 1 }}>
           Feature Toggles
         </Typography>
@@ -159,12 +173,52 @@ const ModInfo = () => {
               key={feature}
               control={
                 <Checkbox
-                  name={feature}
+                  name={`featureToggles.${feature}`}
                   checked={modInfo.featureToggles[feature]}
                   onChange={handleCheckboxChange}
                 />
               }
               label={feature.replace(/([A-Z])/g, " $1").trim()} // Format the label for better readability
+            />
+          ))}
+        </Box>
+
+        {/* Data Sync Options */}
+        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+          Data Sync Options
+        </Typography>
+        <Box display="flex" flexDirection="column" gap={1}>
+          {Object.keys(modInfo.dataSyncOptions).map((option) => (
+            <FormControlLabel
+              key={option}
+              control={
+                <Checkbox
+                  name={`dataSyncOptions.${option}`}
+                  checked={modInfo.dataSyncOptions[option]}
+                  onChange={handleCheckboxChange}
+                />
+              }
+              label={option.replace(/([A-Z])/g, " $1").trim()}
+            />
+          ))}
+        </Box>
+
+        {/* User Validation Options */}
+        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+          User Validation Options
+        </Typography>
+        <Box display="flex" flexDirection="column" gap={1}>
+          {Object.keys(modInfo.userValidationOptions).map((option) => (
+            <FormControlLabel
+              key={option}
+              control={
+                <Checkbox
+                  name={`userValidationOptions.${option}`}
+                  checked={modInfo.userValidationOptions[option]}
+                  onChange={handleCheckboxChange}
+                />
+              }
+              label={option.replace(/([A-Z])/g, " $1").trim()}
             />
           ))}
         </Box>
