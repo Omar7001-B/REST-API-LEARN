@@ -31,26 +31,38 @@ const ModInfo = () => {
   const [success, setSuccess] = useState(false);
 
   const modInfoBaseUrl =
-    process.env.REACT_APP_ENV === "development"
-      ? process.env.REACT_APP_API_MOD_INFO_URL
-      : process.env.REACT_APP_API_MOD_INFO_URL;
+    process.env.MOD_INFO_API || "http://localhost:3001/modInfo";
+  const DEBUG = process.env.REACT_APP_ENV === "development";
+
+  const log = (...args) => {
+    if (DEBUG) {
+      console.log(...args);
+    }
+  };
+
+  log("modInfoBaseUrl:", modInfoBaseUrl);
 
   const fetchModInfo = async () => {
     try {
+      log("Fetching mod info from:", modInfoBaseUrl); // Log the URL
       const response = await axios.get(modInfoBaseUrl);
+      log("Fetched mod info:", response.data);
       setModInfo(response.data);
-      setLoading(false);
     } catch (error) {
+      log("Error fetching mod info:", error); // Log the error
       setError("Error fetching mod info");
+    } finally {
       setLoading(false);
     }
   };
 
   const handleUpdate = async () => {
     try {
+      log("Updating mod info:", modInfo); // Log the mod info being sent
       await axios.patch(modInfoBaseUrl, modInfo);
       setSuccess(true);
     } catch (error) {
+      log("Error updating mod info:", error); // Log the error
       setError("Error updating mod info");
     }
   };
@@ -66,13 +78,13 @@ const ModInfo = () => {
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    setModInfo({
-      ...modInfo,
+    setModInfo((prev) => ({
+      ...prev,
       featureToggles: {
-        ...modInfo.featureToggles,
+        ...prev.featureToggles,
         [name]: checked,
       },
-    });
+    }));
   };
 
   const handleCloseSnackbar = () => {
@@ -81,6 +93,15 @@ const ModInfo = () => {
   };
 
   if (loading) return <CircularProgress />; // Show loading indicator
+  if (error)
+    return (
+      <Snackbar
+        open={Boolean(error)}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={error}
+      />
+    );
 
   return (
     <Box sx={{ padding: 2 }}>
