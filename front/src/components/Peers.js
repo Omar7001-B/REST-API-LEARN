@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 const API_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:3001/subscribers";
+  process.env.SUSBCRIBERS_API || "http://localhost:3001/subscribers";
 
 // Debug flag
 const DEBUG = process.env.REACT_APP_ENV === "development";
