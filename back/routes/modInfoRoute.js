@@ -33,16 +33,28 @@ router.patch("/", getModInfo, async (req, res) => {
   if (req.body.discordLink !== undefined) {
     res.modInfo.discordLink = req.body.discordLink;
   }
-  if (req.body.activeAllUsers !== undefined) {
-    res.modInfo.activeAllUsers = req.body.activeAllUsers;
+  if (req.body.enableAll !== undefined) {
+    res.modInfo.enableAll = req.body.enableAll;
   }
-  if (req.body.disableAllUsers !== undefined) {
-    res.modInfo.disableAllUsers = req.body.disableAllUsers;
+  if (req.body.disableAll !== undefined) {
+    res.modInfo.disableAll = req.body.disableAll;
   }
   if (req.body.featureToggles !== undefined) {
     res.modInfo.featureToggles = {
       ...res.modInfo.featureToggles,
       ...req.body.featureToggles,
+    };
+  }
+  if (req.body.dataSyncOptions !== undefined) {
+    res.modInfo.dataSyncOptions = {
+      ...res.modInfo.dataSyncOptions,
+      ...req.body.dataSyncOptions,
+    };
+  }
+  if (req.body.userValidationOptions !== undefined) {
+    res.modInfo.userValidationOptions = {
+      ...res.modInfo.userValidationOptions,
+      ...req.body.userValidationOptions,
     };
   }
 

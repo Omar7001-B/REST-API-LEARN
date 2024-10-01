@@ -16,14 +16,29 @@ Content-Type: application/json
   "version": "1.0.0",
   "updateAvailable": false,
   "discordLink": "https://discord.gg/sfNXW3PqQu",
-  "activeAllUsers": true,
-  "disableAllUsers": false,
+  "enableAll": true,
+  "disableAll": false,
   "featureToggles": {
-    "enableFarming": true,
-    "enableBuyItems": true,
-    "enableBuyGears": true,
-    "enableSaveInventory": true,
-    "enableCompleteInventory": true
+    "farming": true,
+    "buyItems": true,
+    "buyGear": true,
+    "statistics": true,
+    "saveInventory": true,
+    "recoverInventory": true,
+    "sendInventory": true,
+    "completeInventory": true
+  },
+  "dataSyncOptions": {
+    "onGameOpenClose": true,
+    "onModScreenOpen": true,
+    "afterCycle": false,
+    "afterOperation": true
+  },
+  "userValidationOptions": {
+    "onGameStart": true,
+    "onScreenOpen": true,
+    "afterCycle": false,
+    "afterOperation": true
   }
 }
 
@@ -37,13 +52,28 @@ Content-Type: application/json
   "version": "1.0.0",
   "updateAvailable": false,
   "discordLink": "https://discord.gg/sfNXW3PqQu",
-  "activeAllUsers": false,
-  "disableAllUsers": false,
+  "enableAll": false,
+  "disableAll": false,
   "featureToggles": {
-    "enableFarming": false,
-    "enableBuyItems": false,
-    "enableBuyGears": false,
-    "enableSaveInventory": false,
-    "enableCompleteInventory": false
+    "farming": false,
+    "buyItems": false,
+    "buyGear": false,
+    "statistics": false,
+    "saveInventory": false,
+    "recoverInventory": false,
+    "sendInventory": false,
+    "completeInventory": false
+  },
+  "dataSyncOptions": {
+    "onGameOpenClose": false,
+    "onModScreenOpen": false,
+    "afterCycle": false,
+    "afterOperation": false
+  },
+  "userValidationOptions": {
+    "onGameStart": false,
+    "onScreenOpen": false,
+    "afterCycle": false,
+    "afterOperation": false
   }
 }
