@@ -56,26 +56,22 @@ router.post("/stats/:username", async (req, res) => {
 
   await updatePublicIP(username, ip); // Update the public IP for the subscriber
 
-  const statsExists = await Stats.findOne({ username });
+  try {
+    const statsExists = await Stats.findOne({ username });
 
-  if (statsExists) {
-    // Update stats if it already exists
-    Object.assign(statsExists, req.body); // Update with the request body
-    try {
+    if (statsExists) {
+      // Update stats if it already exists
+      Object.assign(statsExists, req.body); // Update with the request body
       const updatedStats = await statsExists.save();
       return res.status(200).json(updatedStats);
-    } catch (err) {
-      return res.status(400).json({ message: err.message });
-    }
-  } else {
-    // Create new stats if it doesn't exist
-    const stats = new Stats({ username, ...req.body });
-    try {
+    } else {
+      // Create new stats if it doesn't exist
+      const stats = new Stats({ username, ...req.body });
       const newStats = await stats.save();
       return res.status(201).json(newStats);
-    } catch (err) {
-      return res.status(400).json({ message: err.message });
     }
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
   }
 });
 
