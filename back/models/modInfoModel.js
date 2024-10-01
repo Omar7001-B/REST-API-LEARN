@@ -13,11 +13,11 @@ const modInfoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  enableAll: {
+  enableAllUsers: {
     type: Boolean,
     required: true,
   },
-  disableAll: {
+  disableAllUsers: {
     type: Boolean,
     required: true,
   },

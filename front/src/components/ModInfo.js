@@ -16,8 +16,8 @@ const ModInfo = () => {
     version: "",
     updateAvailable: false,
     discordLink: "",
-    enableAll: false,
-    disableAll: false,
+    enableAllUsers: false,
+    disableAllUsers: false,
     featureToggles: {
       farming: false,
       buyItems: false,
@@ -155,25 +155,25 @@ const ModInfo = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={modInfo.enableAll}
+                checked={modInfo.enableAllUsers}
                 onChange={(e) =>
                   setModInfo((prev) => ({
                     ...prev,
-                    enableAll: e.target.checked,
+                    enableAllUsers: e.target.checked,
                   }))
                 }
               />
             }
-            label="Enable All"
+            label="Enable All Users"
           />
           <FormControlLabel
             control={
               <Checkbox
-                checked={modInfo.disableAll}
+                checked={modInfo.disableAllUsers}
                 onChange={(e) =>
                   setModInfo((prev) => ({
                     ...prev,
-                    disableAll: e.target.checked,
+                    disableAllUsers: e.target.checked,
                   }))
                 }
               />

@@ -16,8 +16,8 @@ Content-Type: application/json
   "version": "1.0.0",
   "updateAvailable": false,
   "discordLink": "https://discord.gg/sfNXW3PqQu",
-  "enableAll": true,
-  "disableAll": false,
+  "enableAllUsers": true,
+  "disableAllUsers": false,
   "featureToggles": {
     "farming": true,
     "buyItems": true,
@@ -52,8 +52,8 @@ Content-Type: application/json
   "version": "1.0.0",
   "updateAvailable": false,
   "discordLink": "https://discord.gg/sfNXW3PqQu",
-  "enableAll": false,
-  "disableAll": false,
+  "enableAllUsers": false,
+  "disableAllUsers": false,
   "featureToggles": {
     "farming": false,
     "buyItems": false,
