@@ -13,20 +13,35 @@ const modInfoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  activeAllUsers: {
+  enableAll: {
     type: Boolean,
     required: true,
   },
-  disableAllUsers: {
+  disableAll: {
     type: Boolean,
     required: true,
   },
   featureToggles: {
-    enableFarming: { type: Boolean, required: true },
-    enableBuyItems: { type: Boolean, required: true },
-    enableBuyGears: { type: Boolean, required: true },
-    enableSaveInventory: { type: Boolean, required: true },
-    enableCompleteInventory: { type: Boolean, required: true },
+    farming: { type: Boolean, required: true },
+    buyItems: { type: Boolean, required: true },
+    buyGear: { type: Boolean, required: true },
+    statistics: { type: Boolean, required: true },
+    saveInventory: { type: Boolean, required: true },
+    recoverInventory: { type: Boolean, required: true },
+    sendInventory: { type: Boolean, required: true },
+    completeInventory: { type: Boolean, required: true },
+  },
+  dataSyncOptions: {
+    onGameOpenClose: { type: Boolean, required: true }, // Sync on game open/close
+    onModScreenOpen: { type: Boolean, required: true }, // Sync on mod screen open
+    afterCycle: { type: Boolean, required: true }, // Sync after each cycle
+    afterOperation: { type: Boolean, required: true }, // Sync after every operation
+  },
+  userValidationOptions: {
+    onGameStart: { type: Boolean, required: true }, // Validate user on game start
+    onScreenOpen: { type: Boolean, required: true }, // Validate user on any screen open
+    afterCycle: { type: Boolean, required: true }, // Validate user after each cycle
+    afterOperation: { type: Boolean, required: true }, // Validate user after every operation
   },
 });
 
