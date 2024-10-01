@@ -1,0 +1,53 @@
+### 1. (Local) Get all stats
+GET http://localhost:3001/stats
+Accept: application/json
+
+### (Deployed) 1. Get all stats
+GET https://rest-api-back.vercel.app/stats
+Accept: application/json
+
+### 2. Get stats by username
+GET http://localhost:3001/stats/Shadow94
+Accept: application/json
+
+### 3. Create new stats
+POST http://localhost:3001/stats
+Content-Type: application/json
+
+{
+  "username": "Shadow943",
+  "farmingStats": {
+    "Gold Block": 74,
+    "Gold Nugget": 100,
+    "Raw Gold": 2893,
+    "Gold Ingot": 270
+  },
+  "itemStats": {
+    "Cobweb": 64,
+    "Potion of Strength": 20
+  },
+  "gearStats": {
+    "Sword": 20,
+    "Shears": 1,
+    "Bow": 1
+  }
+}
+
+### 4. Update stats by username
+PATCH http://localhost:3001/stats/Shadow94
+Content-Type: application/json
+
+{
+  "farmingStats": {
+    "Gold Block": 80
+  },
+  "gearStats": {
+    "Sword": 25
+  }
+}
+
+### 5. Delete stats by username
+DELETE http://localhost:3001/stats/Shadow94
+
+### 6. Test endpoint
+GET http://localhost:3001/stats/test
