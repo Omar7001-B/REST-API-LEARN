@@ -52,40 +52,37 @@ const ModInfo = () => {
     }
   };
 
-  log("modInfoBaseUrl:", modInfoBaseUrl);
+  useEffect(() => {
+    const fetchModInfo = async () => {
+      try {
+        log("Fetching mod info from:", modInfoBaseUrl);
+        const response = await axios.get(modInfoBaseUrl);
+        setModInfo(response.data);
+      } catch (error) {
+        setError("Error fetching mod info");
+        log("Error fetching mod info:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchModInfo = async () => {
-    try {
-      log("Fetching mod info from:", modInfoBaseUrl); // Log the URL
-      const response = await axios.get(modInfoBaseUrl);
-      log("Fetched mod info:", response.data);
-      setModInfo(response.data);
-    } catch (error) {
-      log("Error fetching mod info:", error); // Log the error
-      setError("Error fetching mod info");
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchModInfo();
+  }, [modInfoBaseUrl]);
 
   const handleUpdate = async () => {
     try {
-      log("Updating mod info:", modInfo); // Log the mod info being sent
+      log("Updating mod info:", modInfo);
       await axios.patch(modInfoBaseUrl, modInfo);
       setSuccess(true);
     } catch (error) {
-      log("Error updating mod info:", error); // Log the error
       setError("Error updating mod info");
+      log("Error updating mod info:", error);
     }
   };
 
-  useEffect(() => {
-    fetchModInfo();
-  }, []);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setModInfo({ ...modInfo, [name]: value });
+    setModInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCheckboxChange = (e) => {
@@ -93,10 +90,7 @@ const ModInfo = () => {
     const [section, field] = name.split(".");
     setModInfo((prev) => ({
       ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: checked,
-      },
+      [section]: { ...prev[section], [field]: checked },
     }));
   };
 
@@ -105,8 +99,8 @@ const ModInfo = () => {
     setSuccess(false);
   };
 
-  if (loading) return <CircularProgress />; // Show loading indicator
-  if (error)
+  if (loading) return <CircularProgress />;
+  if (error) {
     return (
       <Snackbar
         open={Boolean(error)}
@@ -115,6 +109,25 @@ const ModInfo = () => {
         message={error}
       />
     );
+  }
+
+  const renderCheckboxes = (options, section) => (
+    <Box display="flex" flexDirection="column" gap={1}>
+      {Object.keys(options).map((option) => (
+        <FormControlLabel
+          key={option}
+          control={
+            <Checkbox
+              name={`${section}.${option}`}
+              checked={options[option]}
+              onChange={handleCheckboxChange}
+            />
+          }
+          label={option.replace(/([A-Z])/g, " $1").trim()}
+        />
+      ))}
+    </Box>
+  );
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -144,7 +157,10 @@ const ModInfo = () => {
               <Checkbox
                 checked={modInfo.enableAll}
                 onChange={(e) =>
-                  setModInfo({ ...modInfo, enableAll: e.target.checked })
+                  setModInfo((prev) => ({
+                    ...prev,
+                    enableAll: e.target.checked,
+                  }))
                 }
               />
             }
@@ -155,7 +171,10 @@ const ModInfo = () => {
               <Checkbox
                 checked={modInfo.disableAll}
                 onChange={(e) =>
-                  setModInfo({ ...modInfo, disableAll: e.target.checked })
+                  setModInfo((prev) => ({
+                    ...prev,
+                    disableAll: e.target.checked,
+                  }))
                 }
               />
             }
@@ -163,65 +182,23 @@ const ModInfo = () => {
           />
         </Box>
 
-        {/* Feature Toggles */}
         <Typography variant="h6" sx={{ marginBottom: 1 }}>
           Feature Toggles
         </Typography>
-        <Box display="flex" flexDirection="column" gap={1}>
-          {Object.keys(modInfo.featureToggles).map((feature) => (
-            <FormControlLabel
-              key={feature}
-              control={
-                <Checkbox
-                  name={`featureToggles.${feature}`}
-                  checked={modInfo.featureToggles[feature]}
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label={feature.replace(/([A-Z])/g, " $1").trim()} // Format the label for better readability
-            />
-          ))}
-        </Box>
+        {renderCheckboxes(modInfo.featureToggles, "featureToggles")}
 
-        {/* Data Sync Options */}
         <Typography variant="h6" sx={{ marginBottom: 1 }}>
           Data Sync Options
         </Typography>
-        <Box display="flex" flexDirection="column" gap={1}>
-          {Object.keys(modInfo.dataSyncOptions).map((option) => (
-            <FormControlLabel
-              key={option}
-              control={
-                <Checkbox
-                  name={`dataSyncOptions.${option}`}
-                  checked={modInfo.dataSyncOptions[option]}
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label={option.replace(/([A-Z])/g, " $1").trim()}
-            />
-          ))}
-        </Box>
+        {renderCheckboxes(modInfo.dataSyncOptions, "dataSyncOptions")}
 
-        {/* User Validation Options */}
         <Typography variant="h6" sx={{ marginBottom: 1 }}>
           User Validation Options
         </Typography>
-        <Box display="flex" flexDirection="column" gap={1}>
-          {Object.keys(modInfo.userValidationOptions).map((option) => (
-            <FormControlLabel
-              key={option}
-              control={
-                <Checkbox
-                  name={`userValidationOptions.${option}`}
-                  checked={modInfo.userValidationOptions[option]}
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label={option.replace(/([A-Z])/g, " $1").trim()}
-            />
-          ))}
-        </Box>
+        {renderCheckboxes(
+          modInfo.userValidationOptions,
+          "userValidationOptions"
+        )}
       </Box>
 
       <Button
@@ -233,7 +210,6 @@ const ModInfo = () => {
         Update Settings
       </Button>
 
-      {/* Snackbar for error/success feedback */}
       <Snackbar
         open={Boolean(error) || success}
         autoHideDuration={6000}
