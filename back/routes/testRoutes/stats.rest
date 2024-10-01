@@ -15,7 +15,7 @@ POST http://localhost:3001/stats
 Content-Type: application/json
 
 {
-  "username": "Shadow943",
+  "username": "Shadow940003",
   "farmingStats": {
     "Gold Block": 74,
     "Gold Nugget": 100,
@@ -23,6 +23,7 @@ Content-Type: application/json
     "Gold Ingot": 270
   },
   "itemStats": {
+    "Arrows": 64,
     "Cobweb": 64,
     "Potion of Strength": 20
   },
@@ -34,7 +35,7 @@ Content-Type: application/json
 }
 
 ### 4. Update stats by username
-PATCH http://localhost:3001/stats/Shadow94
+PATCH http://localhost:3001/stats/Shadow094
 Content-Type: application/json
 
 {
