@@ -67,10 +67,15 @@ const Home = () => {
           <Button
             fullWidth
             variant="contained"
-            disabled
-            sx={{ marginBottom: 1, backgroundColor: "#cccccc", color: "#fff" }}
+            sx={{
+              marginBottom: 1,
+              backgroundColor: "#00796b",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#004d40" },
+            }}
+            onClick={() => navigate("/statistics")}
           >
-            Statistics (Coming Soon)
+            Statistics
           </Button>
         </Box>
       </Box>

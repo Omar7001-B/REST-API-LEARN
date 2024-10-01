@@ -7,6 +7,7 @@ import SubscribersTable from "./components/SubscribersTable";
 import ModInfo from "./components/ModInfo";
 import Peers from "./components/Peers";
 import DefaultPage from "./components/DefaultPage";
+import Statistics from "./components/Statistics";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,11 +25,8 @@ const App = () => {
               <Route index element={<DefaultPage />} /> {/* Default page */}
               <Route path="subscribers" element={<SubscribersTable />} />
               <Route path="settings" element={<ModInfo />} />
-              <Route
-                path="statistics"
-                element={<div>Statistics (Coming Soon)</div>}
-              />
               <Route path="peers" element={<Peers />} />
+              <Route path="statistics" element={<Statistics />} />
             </Route>
           </>
         ) : (
