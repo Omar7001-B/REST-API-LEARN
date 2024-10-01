@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const DEBUG = true;
+const DEBUG = false;
 const log = (...args) => {
   if (DEBUG) {
     console.log(...args);
@@ -28,7 +28,7 @@ if (
 // Construct the connection string
 const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}${process.env.DB_OPTIONS}`;
 
-log(connectionString);
+//log(connectionString);
 
 mongoose
   .connect(connectionString, {
@@ -57,9 +57,12 @@ app.use((req, res, next) => {
 });
 
 const subscribersRouter = require("./routes/subscriberRoute");
-const modInfoRouter = require("./routes/modInfoRoute"); // Corrected import for modInfoRouter
+const modInfoRouter = require("./routes/modInfoRoute");
+const statsRouter = require("./routes/statsRoute");
+
 app.use("/subscribers", subscribersRouter);
 app.use("/modInfo", modInfoRouter);
+app.use("/stats", statsRouter);
 
 app.all("*", (req, res) => {
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
