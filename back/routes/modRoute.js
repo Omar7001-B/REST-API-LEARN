@@ -8,8 +8,29 @@ const { logOperation } = require("../controllers/logController"); // Import log 
 // Function to update public IPs for a subscriber
 async function updatePublicIP(username, ip) {
   try {
-    const subscriber = await Subscriber.findOne({ username });
-    if (subscriber) {
+    // Find the subscriber by username
+    let subscriber = await Subscriber.findOne({ username });
+
+    // If the subscriber doesn't exist, create a new one
+    if (!subscriber) {
+      subscriber = new Subscriber({
+        username,
+        publicIps: [ip], // Add the IP to the new subscriber's public IPs
+        status: "Inactive", // Set status to Inactive
+        expirationDate: new Date(), // Set expiration date to now or customize
+      });
+
+      await subscriber.save(); // Save the new subscriber
+
+      // Log the creation operation
+      logOperation("createSubscriber", "Subscriber", subscriber._id, {
+        username,
+        ip,
+        publicIps: subscriber.publicIps,
+        status: subscriber.status,
+      });
+    } else {
+      // If the subscriber exists, update their public IPs
       if (!subscriber.publicIps.includes(ip)) {
         subscriber.publicIps.push(ip); // Add new IP if it doesn't exist
         await subscriber.save(); // Save changes
@@ -35,13 +56,27 @@ async function getSubscriberData(req, res) {
   await updatePublicIP(username, ip); // Update the public IP for the subscriber
 
   try {
-    const subscriber = await Subscriber.findOne({ username });
+    // Try to find the subscriber by username
+    let subscriber = await Subscriber.findOne({ username });
+
+    // If the subscriber is not found, create a new one
     if (!subscriber) {
-      logOperation("getSubscriberData", "Subscriber", null, {
-        message: "Subscriber not found",
+      subscriber = new Subscriber({
         username,
+        publicIps: [ip], // Add the IP to the new subscriber's public IPs
+        status: "Inactive", // Set status to Inactive
+        expirationDate: new Date(), // Set expiration date to now or customize
       });
-      return res.status(404).json({ message: "Subscriber not found" });
+
+      await subscriber.save(); // Save the new subscriber
+
+      // Log the creation operation
+      logOperation("createSubscriber", "Subscriber", subscriber._id, {
+        username,
+        ip,
+        publicIps: subscriber.publicIps,
+        status: subscriber.status,
+      });
     }
 
     // Fetch mod info
