@@ -27,9 +27,6 @@ router.patch("/", getModInfo, async (req, res) => {
   if (req.body.version !== undefined) {
     res.modInfo.version = req.body.version;
   }
-  if (req.body.updateAvailable !== undefined) {
-    res.modInfo.updateAvailable = req.body.updateAvailable;
-  }
   if (req.body.discordLink !== undefined) {
     res.modInfo.discordLink = req.body.discordLink;
   }

@@ -14,7 +14,6 @@ import {
 const ModInfo = () => {
   const [modInfo, setModInfo] = useState({
     version: "",
-    updateAvailable: false,
     discordLink: "",
     enableAllUsers: false,
     disableAllUsers: false,

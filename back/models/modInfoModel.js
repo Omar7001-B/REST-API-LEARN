@@ -5,10 +5,6 @@ const modInfoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  updateAvailable: {
-    type: Boolean,
-    required: true,
-  },
   discordLink: {
     type: String,
     required: true,
