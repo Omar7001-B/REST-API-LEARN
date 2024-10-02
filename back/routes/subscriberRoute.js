@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Subscriber = require("../models/subscriberModel");
-const { logOperation } = require("../controllers/managerLogController"); // Import the log function
+const { logOperation } = require("../controllers/managerLogController");
 
 // Middleware to get subscriber by username
 async function getSubscriberByUsername(req, res, next) {
@@ -20,40 +20,41 @@ async function getSubscriberByUsername(req, res, next) {
 
 // Getting all subscribers
 router.get("/", async (req, res) => {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
   try {
     const subscribers = await Subscriber.find();
-    // Log the operation
-    await logOperation(
-      "GET",
+    res.json(subscribers);
+
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    // Simple logging
+    logOperation(
+      "getAllSubscribers",
       "Subscriber",
       null,
-      "Fetched all subscribers",
+      { count: subscribers.length },
       ip
-    );
-    res.json(subscribers);
+    ).catch((err) => console.error("Logging error:", err));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
 // Getting one subscriber by username
-router.get("/:username", getSubscriberByUsername, async (req, res) => {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
-  // Log the operation
-  await logOperation(
-    "GET",
-    "Subscriber",
-    req.params.username,
-    "Fetched subscriber details",
-    ip
-  );
+router.get("/:username", getSubscriberByUsername, (req, res) => {
   res.json(res.subscriber);
+
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  // Simple logging
+  logOperation(
+    "getSubscriberByUsername",
+    "Subscriber",
+    res.subscriber._id,
+    { subscriber: res.subscriber },
+    ip
+  ).catch((err) => console.error("Logging error:", err));
 });
 
 // Creating a new subscriber (username must be unique)
 router.post("/", async (req, res) => {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
   const subscriberExists = await Subscriber.findOne({
     username: req.body.username,
   });
@@ -70,15 +71,17 @@ router.post("/", async (req, res) => {
 
   try {
     const newSubscriber = await subscriber.save();
-    // Log the operation
-    await logOperation(
-      "CREATE",
-      "Subscriber",
-      newSubscriber.username,
-      "Created new subscriber",
-      ip
-    );
     res.status(201).json(newSubscriber);
+
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    // Simple logging
+    logOperation(
+      "createSubscriber",
+      "Subscriber",
+      newSubscriber._id,
+      { subscriber: newSubscriber },
+      ip
+    ).catch((err) => console.error("Logging error:", err));
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -86,7 +89,6 @@ router.post("/", async (req, res) => {
 
 // Updating a subscriber by username (partial update)
 router.patch("/:username", getSubscriberByUsername, async (req, res) => {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
   if (req.body.username != null) {
     res.subscriber.username = req.body.username;
   }
@@ -103,15 +105,17 @@ router.patch("/:username", getSubscriberByUsername, async (req, res) => {
 
   try {
     const updatedSubscriber = await res.subscriber.save();
-    // Log the operation
-    await logOperation(
-      "UPDATE",
-      "Subscriber",
-      updatedSubscriber.username,
-      "Updated subscriber details",
-      ip
-    );
     res.json(updatedSubscriber);
+
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    // Simple logging
+    logOperation(
+      "updateSubscriber",
+      "Subscriber",
+      updatedSubscriber._id,
+      { subscriber: updatedSubscriber },
+      ip
+    ).catch((err) => console.error("Logging error:", err));
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -119,18 +123,19 @@ router.patch("/:username", getSubscriberByUsername, async (req, res) => {
 
 // Deleting a subscriber by username
 router.delete("/:username", getSubscriberByUsername, async (req, res) => {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
   try {
     await Subscriber.deleteOne({ username: req.params.username });
-    // Log the operation
-    await logOperation(
-      "DELETE",
-      "Subscriber",
-      req.params.username,
-      "Deleted subscriber",
-      ip
-    );
     res.json({ message: "Subscriber deleted" });
+
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    // Simple logging
+    logOperation(
+      "deleteSubscriber",
+      "Subscriber",
+      res.subscriber._id,
+      { subscriber: res.subscriber },
+      ip
+    ).catch((err) => console.error("Logging error:", err));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
