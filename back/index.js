@@ -60,12 +60,14 @@ const subscribersRouter = require("./routes/subscriberRoute");
 const modInfoRouter = require("./routes/modInfoRoute");
 const statsRouter = require("./routes/statsRoute");
 const modRouter = require("./routes/modRoute");
+const managerLogRouter = require("./routes/managerLogRoute");
 const logRouter = require("./routes/logRoutes");
 
 app.use("/subscribers", subscribersRouter);
 app.use("/modInfo", modInfoRouter);
 app.use("/stats", statsRouter);
 app.use("/mod", modRouter);
+app.use("/manager-logs", managerLogRouter);
 app.use("/logs", logRouter);
 
 app.all("*", (req, res) => {
