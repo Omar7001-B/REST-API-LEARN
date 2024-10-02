@@ -77,6 +77,32 @@ const Home = () => {
           >
             Statistics
           </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              marginBottom: 1,
+              backgroundColor: "#00796b",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#004d40" },
+            }}
+            onClick={() => navigate("/log")}
+          >
+            Logs
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              marginBottom: 1,
+              backgroundColor: "#00796b",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#004d40" },
+            }}
+            onClick={() => navigate("/manager-log")}
+          >
+            Manager Logs
+          </Button>
         </Box>
       </Box>
 

@@ -8,6 +8,8 @@ import ModInfo from "./components/ModInfo";
 import Peers from "./components/Peers";
 import DefaultPage from "./components/DefaultPage";
 import Statistics from "./components/Statistics";
+import Log from "./components/Log";
+import ManagerLog from "./components/ManagerLog";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,6 +29,8 @@ const App = () => {
               <Route path="settings" element={<ModInfo />} />
               <Route path="peers" element={<Peers />} />
               <Route path="statistics" element={<Statistics />} />
+              <Route path="log" element={<Log />} />
+              <Route path="manager-log" element={<ManagerLog />} />
             </Route>
           </>
         ) : (
