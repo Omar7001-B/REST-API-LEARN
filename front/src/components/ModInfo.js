@@ -21,7 +21,10 @@ const ModInfo = () => {
       farming: false,
       buyItems: false,
       buyGear: false,
+      statistics: false,
       saveInventory: false,
+      recoverInventory: false,
+      sendInventory: false,
       completeInventory: false,
     },
     dataSyncOptions: {
