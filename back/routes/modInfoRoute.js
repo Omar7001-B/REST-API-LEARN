@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ModInfo = require("../models/modInfoModel");
+const { logOperation } = require("../controllers/managerLogController"); // Import logOperation from the new controller
 
 // Middleware to get mod info
 async function getModInfo(req, res, next) {
@@ -17,8 +18,18 @@ async function getModInfo(req, res, next) {
 }
 
 // Getting the mod info (there's only one)
-router.get("/", getModInfo, (req, res) => {
+router.get("/", getModInfo, async (req, res) => {
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
   res.json(res.modInfo);
+
+  // Log the operation
+  await logOperation(
+    "getModInfo",
+    "ModInfo",
+    res.modInfo._id,
+    { modInfo: res.modInfo },
+    ip
+  );
 });
 
 // Updating the mod info (partial update)
@@ -30,11 +41,11 @@ router.patch("/", getModInfo, async (req, res) => {
   if (req.body.discordLink !== undefined) {
     res.modInfo.discordLink = req.body.discordLink;
   }
-  if (req.body.enableAll !== undefined) {
-    res.modInfo.enableAll = req.body.enableAll;
+  if (req.body.enableAllUsers !== undefined) {
+    res.modInfo.enableAllUsers = req.body.enableAllUsers;
   }
-  if (req.body.disableAll !== undefined) {
-    res.modInfo.disableAll = req.body.disableAll;
+  if (req.body.disableAllUsers !== undefined) {
+    res.modInfo.disableAllUsers = req.body.disableAllUsers;
   }
   if (req.body.featureToggles !== undefined) {
     res.modInfo.featureToggles = {
@@ -58,6 +69,15 @@ router.patch("/", getModInfo, async (req, res) => {
   try {
     const updatedModInfo = await res.modInfo.save(); // Save updated document
     res.json(updatedModInfo); // Return the updated document
+
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
+    await logOperation(
+      "updateModInfo",
+      "ModInfo",
+      updatedModInfo._id,
+      { modInfo: updatedModInfo },
+      ip
+    );
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -75,6 +95,9 @@ router.post("/init", async (req, res) => {
     // Create the first document
     const modInfo = new ModInfo(req.body);
     await modInfo.save(); // Save the new document
+
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // Get the public IP
+    await logOperation("initModInfo", "ModInfo", modInfo._id, { modInfo }, ip);
 
     res.status(201).json(modInfo); // Return the created document
   } catch (err) {
