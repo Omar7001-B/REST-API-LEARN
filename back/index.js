@@ -60,11 +60,13 @@ const subscribersRouter = require("./routes/subscriberRoute");
 const modInfoRouter = require("./routes/modInfoRoute");
 const statsRouter = require("./routes/statsRoute");
 const modRouter = require("./routes/modRoute");
+const logRouter = require("./routes/logRoutes");
 
 app.use("/subscribers", subscribersRouter);
 app.use("/modInfo", modInfoRouter);
 app.use("/stats", statsRouter);
 app.use("/mod", modRouter);
+app.use("/log", logRouter);
 
 app.all("*", (req, res) => {
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;

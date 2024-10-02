@@ -1,0 +1,9 @@
+### 1. Get all alogs
+GET http://localhost:3001/log
+Content-Type: application/json
+
+
+### 3. Delete all logs
+DELETE http://localhost:3001/log/delete-all
+Content-Type: application/json
+
