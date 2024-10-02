@@ -66,7 +66,7 @@ app.use("/subscribers", subscribersRouter);
 app.use("/modInfo", modInfoRouter);
 app.use("/stats", statsRouter);
 app.use("/mod", modRouter);
-app.use("/log", logRouter);
+app.use("/logs", logRouter);
 
 app.all("*", (req, res) => {
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
