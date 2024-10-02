@@ -15,7 +15,7 @@ import {
   Button,
 } from "@mui/material";
 
-const LOG_API = process.env.LOG_API || "http://localhost:3001/logs";
+const LOG_API = process.env.REACT_APP_LOG_API || "http://localhost:3001/logs";
 
 const LogPage = () => {
   const [logs, setLogs] = useState([]); // Logs state

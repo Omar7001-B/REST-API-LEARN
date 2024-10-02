@@ -45,7 +45,7 @@ const ModInfo = () => {
   const [success, setSuccess] = useState(false);
 
   const modInfoBaseUrl =
-    process.env.MOD_INFO_API || "http://localhost:3001/modInfo";
+    process.env.REACT_APP_MOD_INFO_API || "http://localhost:3001/modInfo";
   const DEBUG = process.env.REACT_APP_ENV === "development";
 
   const log = (...args) => {

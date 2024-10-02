@@ -20,7 +20,7 @@ import {
 import { CheckCircle, Cancel, Edit } from "@mui/icons-material";
 
 const API_URL =
-  process.env.SUBSCRIBERS_API || "http://localhost:3001/subscribers";
+  process.env.REACT_APP_SUBSCRIBERS_API || "http://localhost:3001/subscribers";
 
 // Debug flag
 const DEBUG = process.env.REACT_APP_ENV === "development";

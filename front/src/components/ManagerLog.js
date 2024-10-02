@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 const LOG_API =
-  process.env.MANAGER_LOG_API || "http://localhost:3001/manager-logs";
+  process.env.REACT_APP_MANAGER_LOG_API || "http://localhost:3001/manager-logs";
 
 const ManagerLogPage = () => {
   const [logs, setLogs] = useState([]); // Logs state

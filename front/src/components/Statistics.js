@@ -17,7 +17,8 @@ import {
   Grid,
 } from "@mui/material";
 
-const API_URL = process.env.STATS_API || "http://localhost:3001/stats";
+const API_URL =
+  process.env.REACT_APP_STATS_API || "http://localhost:3001/stats";
 
 // Debug flag
 const DEBUG = process.env.REACT_APP_ENV === "development";
